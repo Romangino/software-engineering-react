@@ -1,7 +1,9 @@
 import axios from "axios";
+const BASE_URL = "https://software-engineering-node-fse.herokuapp.com"
+// const BASE_URL = "http://localhost:4000"
 
-const TUITS_API = "https://software-engineering-node-fa22.herokuapp.com/api/tuits";
-const USERS_API = "https://software-engineering-node-fa22.herokuapp.com/api/users";
+const TUITS_API = `${BASE_URL}/api/tuits`;
+const USERS_API = `${BASE_URL}/api/users`;
 
 export const findAllTuits = () =>
   axios.get(TUITS_API)
