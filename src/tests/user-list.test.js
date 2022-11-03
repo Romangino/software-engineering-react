@@ -39,6 +39,7 @@ test('user list renders mocked', async () => {
   const response = await findAllUsers();
   const users = response.users;
 
+  // Render user list
   render(
     <HashRouter>
       <UserList users={users}/>
