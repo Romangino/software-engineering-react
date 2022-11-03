@@ -2,8 +2,9 @@ import Tuits from "../components/tuits";
 import {screen, render} from "@testing-library/react";
 import {HashRouter} from "react-router-dom";
 import {createTuit, deleteTuit, findAllTuits} from "../services/tuits-service";
-import axios from "axios";
 import {createUser, deleteUsersByUsername} from "../services/users-service";
+
+const axios = require('axios')
 
 const MOCKED_TUITS = [
   {
@@ -129,36 +130,45 @@ describe('tuit list renders async', () => {
   })
 })
 
-//Un-comment to test user list renders mocked
-// jest.mock('axios');
-test('tuit list renders mocked', async () => {
-  axios.get.mockImplementation(() =>
-      Promise.resolve({data: {tuits: MOCKED_TUITS}}))
-  const response = await findAllTuits()
-  const tuits = response.tuits
+describe('tuit list renders mocked', () => {
+    beforeAll(() => {
+        jest.spyOn(axios, 'get').mockImplementation()
+    })
 
-  render(
-      <HashRouter>
-        <Tuits tuits={tuits}/>
-      </HashRouter>
-  )
+    afterAll(() => {
+        jest.resetAllMocks()
+    })
 
-  MOCKED_TUITS.map(
-      tuit => {
 
-        // Expect username from mocked tuits to be in document
-        let username = tuit.postedBy.username
-        const usernameElements = screen.getAllByText(`${username}@${username} -`)
-        usernameElements.forEach(
-            element => expect(element).toBeInTheDocument()
+    test('tuit list renders mocked', async () => {
+        axios.get.mockImplementation(() =>
+                                         Promise.resolve({data: {tuits: MOCKED_TUITS}}))
+        const response = await findAllTuits()
+        const tuits = response.tuits
+
+        render(
+            <HashRouter>
+                <Tuits tuits={tuits}/>
+            </HashRouter>
         )
 
-        // Expect tuit text from mocked tuits to be in document
-        let text = tuit.tuit
-        const tuitTextElements = screen.getAllByText(text)
-        tuitTextElements.forEach(
-            element => expect(element).toBeInTheDocument()
+        MOCKED_TUITS.map(
+            tuit => {
+
+                // Expect username from mocked tuits to be in document
+                let username = tuit.postedBy.username
+                const usernameElements = screen.getAllByText(`${username}@${username} -`)
+                usernameElements.forEach(
+                    element => expect(element).toBeInTheDocument()
+                )
+
+                // Expect tuit text from mocked tuits to be in document
+                let text = tuit.tuit
+                const tuitTextElements = screen.getAllByText(text)
+                tuitTextElements.forEach(
+                    element => expect(element).toBeInTheDocument()
+                )
+            }
         )
-      }
-  )
-});
+    });
+})
