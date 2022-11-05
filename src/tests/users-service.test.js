@@ -126,6 +126,7 @@ describe('findAllUsers',  () => {
   });
 
   // clean up after ourselves
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
   afterAll(() => {
     let promises = []
     // delete the users we inserted

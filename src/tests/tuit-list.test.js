@@ -43,91 +43,91 @@ const MOCKED_TUITS = [
 ]
 
 test('tuit list renders static tuit array', () => {
-  render(
+    // Renders mock tuit data
+    render(
       <HashRouter>
         <Tuits tuits={MOCKED_TUITS}/>
       </HashRouter>
-  )
-  MOCKED_TUITS.map(
+    )
+    MOCKED_TUITS.map(
       tuit => {
         // Verify username is found in document
         let username = tuit.postedBy.username
         const usernameElements = screen.getAllByText(`${username}@${username} -`)
         usernameElements.forEach(
-            username =>
-                expect(username).toBeInTheDocument())
+            username => expect(username).toBeInTheDocument())
 
         // Verify tuit is found in document
         const tuitElements = screen.getAllByText(tuit.tuit)
         tuitElements.forEach(
-            element =>
-                expect(element).toBeInTheDocument())
+            text => expect(text).toBeInTheDocument())
       }
-  )
+    )
 });
 
 describe('tuit list renders async', () => {
-  // Mock tuit data
-  const tuitData = {
+    // Mock tuit data
+    const tuitData = {
     _id: '000000000000000000000001',
     tuit: 'Render tuit list async',
     postedOn: '2022-11-03T00:00:00.000Z'
-  }
+    }
 
-  // Mock user data
-  const larry = {
+    // Mock user data
+    const larry = {
     username: 'larry',
     password: 'larry123',
     email: 'larry@david.com'
-  }
+    }
 
-  beforeAll(() => {
-    let promises = []
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
+    beforeAll(() => {
+        let promises = []
 
-    // Remove test user and test tuit
-    promises.push(deleteUsersByUsername(larry.username))
-    promises.push(deleteTuit(tuitData._id))
+        // Remove test user and test tuit
+        promises.push(deleteUsersByUsername(larry.username))
+        promises.push(deleteTuit(tuitData._id))
 
-    // Wait for all promises to be completed
-    return Promise.all(promises)
-  })
+        // Wait for all promises to be completed
+        return Promise.all(promises)
+    })
 
-  afterAll(() => {
-    let promises = []
+    afterAll(() => {
+        let promises = []
 
-    // Remove test user and test tuit
-    promises.push(deleteUsersByUsername(larry.username))
-    promises.push(deleteTuit(tuitData._id))
+        // Remove test user and test tuit
+        promises.push(deleteUsersByUsername(larry.username))
+        promises.push(deleteTuit(tuitData._id))
 
-    // Wait for all promises to be completed
-    return Promise.all(promises)
-  })
+        // Wait for all promises to be completed
+        return Promise.all(promises)
+    })
 
-  test('tuit list renders async', async () => {
-    // Create test user from mock jeff data
-    const testUser = await createUser(larry);
+    test('tuit list renders async', async () => {
+        // Create test user from mock jeff data
+        const testUser = await createUser(larry);
 
-    // Create mock tuit from tuitData
-    const testTuit = await createTuit(testUser._id, tuitData)
+        // Create mock tuit from tuitData
+        const testTuit = await createTuit(testUser._id, tuitData)
 
-    // Retrieve all tuits in database
-    const allTuits = await findAllTuits()
+        // Retrieve all tuits in database
+        const allTuits = await findAllTuits()
 
-    // Render tuits
-    render(
-        <HashRouter>
-          <Tuits tuits={allTuits}/>
-        </HashRouter>
-    )
+        // Render tuits
+        render(
+            <HashRouter>
+              <Tuits tuits={allTuits}/>
+            </HashRouter>
+        )
 
-    // Expect tuit text element to be in document
-    const tuitTextElement = screen.getByText(testTuit.tuit)
-    expect(tuitTextElement).toBeInTheDocument()
+        // Expect tuit text element to be in document
+        const tuitTextElement = screen.getByText(testTuit.tuit)
+        expect(tuitTextElement).toBeInTheDocument()
 
-    // Expect testUser username to be in document
-    const userElement = screen.getByText(`${testUser.username}@${testUser.username} -`)
-    expect(userElement).toBeInTheDocument()
-  })
+        // Expect testUser username to be in document
+        const userElement = screen.getByText(`${testUser.username}@${testUser.username} -`)
+        expect(userElement).toBeInTheDocument()
+    })
 })
 
 describe('tuit list renders mocked', () => {
