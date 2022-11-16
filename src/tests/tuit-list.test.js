@@ -1,7 +1,7 @@
 import Tuits from "../components/tuits";
 import {screen, render} from "@testing-library/react";
 import {HashRouter} from "react-router-dom";
-import {createTuit, deleteTuit, findAllTuits} from "../services/tuits-service";
+import {createTuitByUser, deleteTuit, findAllTuits} from "../services/tuits-service";
 import {createUser, deleteUsersByUsername} from "../services/users-service";
 
 const axios = require('axios')
@@ -108,7 +108,7 @@ describe('tuit list renders async', () => {
         const testUser = await createUser(larry);
 
         // Create mock tuit from tuitData
-        const testTuit = await createTuit(testUser._id, tuitData)
+        const testTuit = await createTuitByUser(testUser._id, tuitData)
 
         // Retrieve all tuits in database
         const allTuits = await findAllTuits()

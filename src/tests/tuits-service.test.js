@@ -1,4 +1,4 @@
-import {createTuit, deleteTuit, findTuitById, findAllTuits} from "../services/tuits-service";
+import {createTuitByUser, deleteTuit, findTuitById, findAllTuits} from "../services/tuits-service";
 import {createUser, deleteUsersByUsername} from "../services/users-service";
 
 // Create random 24 hexadecimal id for tuit
@@ -49,7 +49,7 @@ describe('can create tuit with REST API', () => {
         const testUser = await createUser(albert)
 
         // Create new tuit using tuit data and posted by new user
-        const testTuit = await createTuit(testUser._id, tuitData)
+        const testTuit = await createTuitByUser(testUser._id, tuitData)
 
         // Create tuit test
         expect(testTuit.tuit).toEqual(tuitData.tuit)
@@ -78,7 +78,7 @@ describe('can delete tuit with REST API', () => {
         // Create a new user using user data
         const testUser = await createUser(larry)
         // Return a new tuit with tuit data posted by new user
-        return createTuit(testUser._id, tuitData)
+        return createTuitByUser(testUser._id, tuitData)
     })
 
     // Clean up after test
@@ -139,7 +139,7 @@ describe('can retrieve a tuit by their primary key with REST API', () => {
 
     test('can retrieve a tuit by their primary key with REST API', async () => {
         const testUser = await createUser(joffrey)
-        const testTuit = await createTuit(testUser._id, tuitData)
+        const testTuit = await createTuitByUser(testUser._id, tuitData)
 
         // Verify tuit match tuitData
         expect(testTuit._id).toEqual(tuitData._id)
@@ -219,7 +219,7 @@ describe('can retrieve all tuits with REST API', () => {
 
         // Create mock tuits from tuitData
         tuitData.map(
-            tuit => createTuit(testUser._id, tuit)
+            tuit => createTuitByUser(testUser._id, tuit)
         )
 
         // Find all tuits in database

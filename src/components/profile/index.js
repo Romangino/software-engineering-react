@@ -1,19 +1,35 @@
-import React from "react";
-import Tuits from "../tuits";
-import {Link} from "react-router-dom";
+import * as service from "../../services/auth-service"
+import {Link, Route, Routes, useLocation, useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import MyTuits from "./my-tuits";
 
 const Profile = () => {
-  return(
+    const location = useLocation()
+    const navigate = useNavigate();
+    const [profile, setProfile] = useState({});
+    useEffect(async () => {
+    try {
+      const user = await service.profile();
+      setProfile(user);
+    } catch (e) {
+      navigate('/login');
+    }
+    }, []);
+    const logout = () => {
+    service.logout()
+        .then(() => navigate('/login'));
+    }
+    return(
     <div className="ttr-profile">
       <div className="border border-bottom-0">
-        <h4 className="p-2 mb-0 pb-0 fw-bolder">NASA<i className="fa fa-badge-check text-primary"></i></h4>
+        <h4 className="p-2 mb-0 pb-0 fw-bolder">{profile.username}<i className="fa fa-badge-check text-primary"></i></h4>
         <span className="ps-2">67.6K Tuits</span>
         <div className="mb-5 position-relative">
-          <img className="w-100" src="../images/nasa-profile-header.jpg"/>
+          <img className="w-100" src="/images/nasa-profile-header.jpg"/>
           <div className="bottom-0 left-0 position-absolute">
             <div className="position-relative">
-              <img className="position-relative ttr-z-index-1 ttr-top-40px ttr-width-150px"
-                   src="../images/nasa-3.png"/>
+              <img className="position-relative ttr-z-index-1 ttr-top-40px ttr-width-150px rounded-circle"
+                   src={`../images/${profile.username}.jpg`}/>
             </div>
           </div>
           <Link to="/profile/edit"
@@ -24,9 +40,10 @@ const Profile = () => {
 
         <div className="p-2">
           <h4 className="fw-bolder pb-0 mb-0">
-            NASA<i className="fa fa-badge-check text-primary"></i>
+              {profile.username}
+              <i className="fa fa-badge-check text-primary"></i>
           </h4>
-          <h6 className="pt-0">@NASA</h6>
+          <h6 className="pt-0">@{profile.username}</h6>
           <p className="pt-2">
             There's space for everybody. Sparkles
           </p>
@@ -45,30 +62,32 @@ const Profile = () => {
           <b className="ms-4">51.1M</b> Followers
           <ul className="mt-4 nav nav-pills nav-fill">
             <li className="nav-item">
-              <Link to="/profile/tuits"
-                    className="nav-link active">
+              <Link to="/profile/mytuits"
+                    className={`nav-link ${location.pathname.indexOf('mytuits') >= 0 ? 'active': ''}`}>
                 Tuits</Link>
             </li>
             <li className="nav-item">
               <Link to="/profile/tuits-and-replies"
-                    className="nav-link">
+                    className={`nav-link ${location.pathname.indexOf('tuits-and-replies') >= 0 ? 'active': ''}`}>
                 Tuits & replies</Link>
             </li>
             <li className="nav-item">
               <Link to="/profile/media"
-                    className="nav-link">
+                    className={`nav-link ${location.pathname.indexOf('media') >= 0 ? 'active': ''}`}>
                 Media</Link>
             </li>
             <li className="nav-item">
-              <Link to="/profile/likes"
-                    className="nav-link">
+              <Link to="/profile/mylikes"
+                    className={`nav-link ${location.pathname.indexOf('mylikes') >= 0 ? 'active': ''}`}>
                 Likes</Link>
             </li>
           </ul>
         </div>
       </div>
-      <Tuits/>
+        <Routes>
+            <Route path="/mytuits" element={<MyTuits/>}/>
+        </Routes>
     </div>
-  );
-}
+    );
+};
 export default Profile;
