@@ -22,6 +22,9 @@ const Profile = () => {
     return(
     <div className="ttr-profile">
       <div className="border border-bottom-0">
+          <div className={'float-end'}>
+              <button className={'btn btn-danger rounded-pill'} onClick={logout}>Logout</button>
+          </div>
         <h4 className="p-2 mb-0 pb-0 fw-bolder">{profile.username}<i className="fa fa-badge-check text-primary"></i></h4>
         <span className="ps-2">67.6K Tuits</span>
         <div className="mb-5 position-relative">
