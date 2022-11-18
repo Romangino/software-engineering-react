@@ -29,7 +29,7 @@ const Tuits = (
                                                <Tuit key={tuit._id}
                                                      deleteTuit={deleteTuit}
                                                      likeTuit={likeTuit}
-                                                     dislike={dislikeTuit}
+                                                     dislikeTuit={dislikeTuit}
                                                      tuit={tuit}/>)
                 }
             </ul>
