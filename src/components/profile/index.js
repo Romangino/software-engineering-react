@@ -2,6 +2,7 @@ import * as service from "../../services/auth-service"
 import {Link, Route, Routes, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import MyTuits from "./my-tuits";
+import MyLikes from "./my-likes";
 
 const Profile = () => {
     const location = useLocation()
@@ -22,6 +23,9 @@ const Profile = () => {
     return(
     <div className="ttr-profile">
       <div className="border border-bottom-0">
+          <div className={'float-end'}>
+              <button className={'btn btn-danger rounded-pill'} onClick={logout}>Logout</button>
+          </div>
         <h4 className="p-2 mb-0 pb-0 fw-bolder">{profile.username}<i className="fa fa-badge-check text-primary"></i></h4>
         <span className="ps-2">67.6K Tuits</span>
         <div className="mb-5 position-relative">
@@ -86,6 +90,7 @@ const Profile = () => {
       </div>
         <Routes>
             <Route path="/mytuits" element={<MyTuits/>}/>
+            <Route path="/mylikes" element={<MyLikes/>}/>
         </Routes>
     </div>
     );
