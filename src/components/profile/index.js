@@ -2,6 +2,7 @@ import * as service from "../../services/auth-service"
 import {Link, Route, Routes, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import MyTuits from "./my-tuits";
+import MyLikes from "./my-likes";
 
 const Profile = () => {
     const location = useLocation()
@@ -89,6 +90,7 @@ const Profile = () => {
       </div>
         <Routes>
             <Route path="/mytuits" element={<MyTuits/>}/>
+            <Route path="/mylikes" element={<MyLikes/>}/>
         </Routes>
     </div>
     );
