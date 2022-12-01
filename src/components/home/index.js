@@ -3,29 +3,31 @@ import Tuits from "../tuits";
 import * as service from "../../services/tuits-service";
 import {useEffect, useState} from "react";
 import {useLocation, useParams} from "react-router-dom";
+import * as authService from "../../services/auth-service"
 
 const Home = () => {
   const location = useLocation();
-  const {uid} = useParams();
+  // const {uid} = useParams();
   const [tuits, setTuits] = useState([]);
   const [tuit, setTuit] = useState('');
-  const userId = uid;
+  const [uid, setUid] = useState()
   const findTuits = () => {
-    if(uid) {
-      return service.findTuitsByUser(uid)
+    return service.findAllTuits()
         .then(tuits => setTuits(tuits))
-    } else {
-      return service.findAllTuits()
-        .then(tuits => setTuits(tuits))
-    }
   }
-  useEffect(() => {
+  useEffect(async () => {
+    if (!uid) {
+      const user = await authService.profile()
+      const userId = user._id
+      setUid(userId)
+      console.log(userId)
+    }
     let isMounted = true;
-    findTuits()
+    await findTuits()
     return () => {isMounted = false;}
   }, []);
   const createTuit = () =>
-      service.createTuitByUser(userId, {tuit})
+      service.createTuitByUser(uid, {tuit})
           .then(findTuits)
   const deleteTuit = (tid) =>
       service.deleteTuit(tid)
